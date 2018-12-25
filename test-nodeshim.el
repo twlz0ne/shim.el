@@ -20,6 +20,7 @@
 (require 'ert)
 (require 'shim)
 
+(setq debug-on-error t)
 (shim-init-node :major-modes '())
 (shim-register-mode 'node 'js-mode)
 (assert (boundp 'shim-node-version))

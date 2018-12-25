@@ -13,13 +13,13 @@ endif
 all: compile test
 
 compile:
-	$(EMACS) --debug-init -batch -L . -f batch-byte-compile $(ELS)
+	$(EMACS) -batch -L . -f batch-byte-compile $(ELS)
 
 test:
 ifeq ($(SELECTOR),)
-	$(EMACS) -Q --debug-init --batch -L . $(addprefix -l , $(ELS) $(TEST_ELS)) -f ert-run-tests-batch-and-exit
+	$(EMACS) -Q --batch -L . $(addprefix -l , $(ELS) $(TEST_ELS)) -f ert-run-tests-batch-and-exit
 else
-	$(EMACS) -Q --debug-init --batch -L . $(addprefix -l , $(ELS) $(TEST_ELS)) --eval "(ert-run-tests-batch-and-exit '$(SELECTOR))"
+	$(EMACS) -Q --batch -L . $(addprefix -l , $(ELS) $(TEST_ELS)) --eval "(ert-run-tests-batch-and-exit '$(SELECTOR))"
 endif
 
 help:
