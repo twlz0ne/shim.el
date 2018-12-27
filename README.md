@@ -11,10 +11,11 @@ Clone this repository, or install from MELPA. Add the following to your `.emacs`
 ```elisp
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/site-lisp/shim.el"))
 (require 'shim)
-(shim-init-java)
-(shim-init-node)
-(shim-init-python)
 (shim-init-ruby)
+(shim-init-python)
+(shim-init-node)
+(shim-init-java)
+(shim-init-go)
 ```
 
 ## Usage

@@ -175,6 +175,13 @@ It contains all of the shim--shim instances that are currently regitered.")
       (shim-auto-set)
     (shim-unset)))
 
+(cl-defun shim-init-go (&key (major-modes '(go-mode)) (executable "goenv"))
+  (shim-init
+   (make-shim--shim
+    :language 'go
+    :major-modes major-modes
+    :executable executable)))
+
 (cl-defun shim-init-java (&key (major-modes '(java-mode)) (executable "jenv"))
   (shim-init
    (make-shim--shim
