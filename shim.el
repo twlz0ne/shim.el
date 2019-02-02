@@ -65,12 +65,15 @@ It contains all of the shim--shim instances that are currently regitered.")
 
 (defun shim-versions (&optional language)
   "List installed versions of LANGUAGE."
-  (let ((language (or language (shim--guess-language))))
-    (cons "system"
-          (split-string
-           (shell-command-to-string
-            (format "%s versions --bare"
-                    (shim--shim-executable (cdr (assq language shim--shims)))))))))
+  (let* ((language (or language (shim--guess-language)))
+         (command (format "%s versions --bare" (shim--shim-executable (cdr (assq language shim--shims)))))
+         (errcode)
+         (output (with-output-to-string
+                   (with-current-buffer standard-output
+                     (setq errcode (call-process-shell-command command nil standard-output))))))
+    (if (zerop errcode)
+        (cons "system" (split-string output))
+      (signal 'shim-error (list output)))))
 
 (defun shim-read-version (&optional language)
   "Read virtual environment from user input for LANGUAGE."
