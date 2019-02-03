@@ -41,6 +41,7 @@
               language
               major-modes
               executable
+              global-version-file
               (built-in-version "system" :read-only t))
 
 (defvar shim--shims '()
@@ -86,8 +87,9 @@ It contains all of the shim--shim instances that are currently regitered.")
   (let* ((language (or language (shim--guess-language)))
          (ver-file (downcase (format ".%s-version" language)))
          (file-dir (locate-dominating-file (or dir default-directory) ver-file)))
-    (when file-dir
-      (concat file-dir ver-file))))
+    (if file-dir
+        (concat file-dir ver-file)
+      (shim--shim-global-version-file (cdr (assq language shim--shims))))))
 
 (defun shim-local-variable (&optional language)
   "Return file local shim variable for LANGUAGE."
@@ -147,7 +149,9 @@ It contains all of the shim--shim instances that are currently regitered.")
         (eval
          `(defvar ,(intern (format "shim-%s-version" language)) nil))
         (add-to-list 'exec-path (expand-file-name (format "~/.%s/shims" exe-name)))
-        (add-to-list 'shim--shims (cons language shim))))))
+        (add-to-list 'shim--shims (cons language shim))
+        (setf (shim--shim-global-version-file shim)
+              (expand-file-name (format "~/.%s/version" exe-name)))))))
 
 (defcustom shim-mode-line
   '(:eval
