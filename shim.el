@@ -142,16 +142,17 @@ It contains all of the shim--shim instances that are currently regitered.")
 
 (defun shim-init (shim)
   "Registers shim--shim instance SHIM."
-  (let ((language (shim--shim-language shim)))
-    (unless (cdr (assq language shim--shims))
-      (let* ((abs-path (executable-find (shim--shim-executable shim)))
-             (exe-name (file-name-base abs-path)))
-        (eval
-         `(defvar ,(intern (format "shim-%s-version" language)) nil))
-        (add-to-list 'exec-path (expand-file-name (format "~/.%s/shims" exe-name)))
-        (add-to-list 'shim--shims (cons language shim))
-        (setf (shim--shim-global-version-file shim)
-              (expand-file-name (format "~/.%s/version" exe-name)))))))
+  (let* ((language (shim--shim-language shim))
+         (abs-path (or (executable-find (shim--shim-executable shim))
+                       (signal 'shim-error
+                               (list (format "%s: command not found" (shim--shim-executable shim))))))
+         (exe-name (file-name-base abs-path)))
+    (eval
+     `(defvar ,(intern (format "shim-%s-version" language)) nil))
+    (add-to-list 'exec-path (expand-file-name (format "~/.%s/shims" exe-name)))
+    (add-to-list 'shim--shims (cons language shim))
+    (setf (shim--shim-global-version-file shim)
+          (expand-file-name (format "~/.%s/version" exe-name)))))
 
 (defcustom shim-mode-line
   '(:eval
