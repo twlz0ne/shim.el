@@ -20,10 +20,12 @@ Clone this repository, or install from MELPA. Add the following to your `.emacs`
 
 ## Usage
 
-Manually:
+### Basic
 
-- `M-x shim-set` input version or select from list.
-- `M-x shim-auto-set` auto detect version.
+Invoke function manually:
+
+- i ) `M-x shim-set` input version or select from list.
+- ii) `M-x shim-auto-set` auto detect version.
 
 Or add to major mode hook:
 
@@ -42,14 +44,17 @@ If you would like specific version by file local variable:
 
 Then you have to add following instead:
 
-```elisp
-(add-hook 'hack-local-variables-hook
-          (lambda ()
-            (when (ignore-errors (shim--guess-language))
-              (shim-mode 1))))
+```diff
+-(add-hook 'js-mode-hook #'shim-mode)
++(add-hook 'hack-local-variables-hook
++          (lambda ()
++            (when (ignore-errors (shim--guess-language))
++              (shim-mode 1))))
 ```
 
-Register major mode:
+### Extended
+
+Add support for new mode:
 
 ```elisp
 (shim-register-mode 'node 'js2-mode)
@@ -61,7 +66,7 @@ Register major mode:
                   rjsx-mode))
 ```
 
-Add support for new language
+Add support for new language:
 
 ```elisp
 (cl-defun shim-init-foo (&key (major-modes '(foo-mode)) (executable "fooenv"))
