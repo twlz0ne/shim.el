@@ -128,6 +128,16 @@ Return project root."
         )))
     ))
 
+(ert-deftest test-init-error ()
+  (should (equal '(shim-error "foo: command not found")
+                 (condition-case err
+                     (shim-init
+                      (make-shim--shim
+                       :language 'foo
+                       :major-modes '(foo-mode)
+                       :executable "foo"))
+                   (shim-error err)))))
+
 (provide 'test-nodeshim)
 
 ;;; test-nodeshim.el ends here
