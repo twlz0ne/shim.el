@@ -126,10 +126,10 @@ It contains all of the shim--shim instances that are currently regitered.")
     (shim-set
      (or file-local-version
          (let ((ver-file (shim-version-file language)))
-           (if ver-file
+           (if (and ver-file (file-exists-p ver-file))
                (replace-regexp-in-string
                 "\\(?:\n\\)\\'" "" (shell-command-to-string (format "head -n 1 %s" ver-file)))
-             (car (reverse (shim-versions language))))))
+             (car (shim-versions language)))))
      language)))
 
 (defmacro shim-register-mode (language mode)
