@@ -33,7 +33,7 @@
 
 ;;; Code:
 
-(require 'cl)
+(require 'cl-lib)
 
 (define-error 'shim-error "Shim error" 'error)
 

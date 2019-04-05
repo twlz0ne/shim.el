@@ -17,6 +17,7 @@
 
 ;;; Code:
 
+(require 'cl)
 (require 'ert)
 (require 'shim)
 
