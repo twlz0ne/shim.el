@@ -175,7 +175,11 @@ It contains all of the shim--shim instances that are currently regitered.")
     (define-key map (kbd "C-c C-u") 'shim-unset)
     map))
 
-(define-minor-mode shim-mode ""
+(define-minor-mode shim-mode
+  "Toggle shim-mode on or off.
+
+Key bindings:
+\\{shim-mode-map}"
   :global nil
   :lighter shim-mode-line
   :keymap shim-mode-map
