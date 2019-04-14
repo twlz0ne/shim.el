@@ -55,7 +55,7 @@ It contains all of the shim--shim instances that are currently regitered.")
             (when (memq major-mode (shim--shim-major-modes (cdr pair)))
               (throw 'found (car pair))))
           shim--shims)
-    (signal 'shim-error (list (format "Not support `%s'" major-mode)))))
+    (signal 'shim-error (list (format "Not support for `%s'" major-mode)))))
 
 (defun shim-version (&optional language)
   "Show currently active version of LANGUAGE."
