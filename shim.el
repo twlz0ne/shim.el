@@ -1,6 +1,6 @@
 ;;; shim.el --- Emacs integration for Xenv -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2018 Gong Qijian <gongqijian@gmail.com>
+;; Copyright (C) 2018-2019 Gong Qijian <gongqijian@gmail.com>
 
 ;; Author: Gong Qijian <gongqijian@gmail.com>
 ;; Created: 2018/12/25
