@@ -6,7 +6,7 @@
 ;; Created: 2018/12/25
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "24.4"))
-;; URL: https://github.com/twlz0ne/shim
+;; URL: https://github.com/twlz0ne/shim.el
 ;; Keywords: environment, tools
 
 ;; This program is free software; you can redistribute it and/or modify
