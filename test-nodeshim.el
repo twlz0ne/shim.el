@@ -63,6 +63,25 @@ Return project root."
     (shim-auto-set)
     (getenv "NODENV_VERSION")))
 
+(defun test-nodeshim--file-buffer (file-name)
+  "Open file `FILE-NAME', retun buffer."
+  (setq enable-local-variables :all)
+  (save-excursion
+    (find-file file-name)
+    (current-buffer)))
+
+(defmacro test-nodeshim--with-shim-on (buf &rest body)
+  (declare (indent defun) (debug t))
+  `(with-current-buffer ,buf
+     (shim-mode 1)
+     ,@body))
+
+(defmacro test-nodeshim--with-shim-off (buf &rest body)
+  (declare (indent defun) (debug t))
+  `(with-current-buffer ,buf
+     (shim-mode -1)
+     ,@body))
+
 (ert-deftest test-nodeshim-node-version-file-0 ()
   (let ((root (test-nodeshim--make-project '(("test.js" . "\n")))))
     (should (equal (test-nodeshim--newest-version)
@@ -89,6 +108,32 @@ Return project root."
                                            ("bar/.node-version" . "7.0.0")))))
     (should (equal "6.0.0" (test-nodeshim--open-file (concat root "foo/test1.js"))))
     (should (equal "7.0.0" (test-nodeshim--open-file (concat root "bar/test2.js"))))))
+
+(ert-deftest test-nodeshim/make-process-environment ()
+  (let* ((root (test-nodeshim--make-project '(("foo/test1.js" . "\n")
+                                              ("foo/.node-version" . "6.0.0")
+                                              ("bar/test2.js" . "\n")
+                                              ("bar/.node-version" . "7.0.0")))))
+    (test-nodeshim--with-shim-on (test-nodeshim--file-buffer (concat root "foo/test1.js"))
+      (test-nodeshim--with-shim-on (test-nodeshim--file-buffer (concat root "bar/test2.js"))
+        (should (equal "7.0.0" (getenv "NODENV_VERSION"))))
+      (should (equal "6.0.0" (getenv "NODENV_VERSION"))))))
+
+(ert-deftest test-nodeshim/kill-process-environment ()
+  (let* ((root (test-nodeshim--make-project '(("foo/test1.js" . "\n")
+                                              ("foo/.node-version" . "6.0.0")
+                                              ("bar/test2.js" . "\n")
+                                              ("bar/.node-version" . "7.0.0"))))
+         (buf1 (test-nodeshim--file-buffer (concat root "foo/test1.js")))
+         (buf2 (test-nodeshim--file-buffer (concat root "bar/test2.js"))))
+    (with-current-buffer buf1
+      (let ((global-env (getenv "NODENV_VERSION")))
+        (should (equal "6.0.0"    (test-nodeshim--with-shim-on  buf1 (getenv "NODENV_VERSION"))))
+        (should (equal global-env (test-nodeshim--with-shim-off buf1 (getenv "NODENV_VERSION"))))))
+    (with-current-buffer buf2
+      (let ((global-env (getenv "NODENV_VERSION")))
+        (should (equal "7.0.0"    (test-nodeshim--with-shim-on  buf2 (getenv "NODENV_VERSION"))))
+        (should (equal global-env (test-nodeshim--with-shim-off buf2 (getenv "NODENV_VERSION"))))))))
 
 (ert-deftest test-nodeshim-local-version ()
   (let ((root (test-nodeshim--make-project
