@@ -111,6 +111,21 @@ It contains all of the shim--shim instances that are currently regitered.")
     symbol))
 
 ;;;###autoload
+(defun shim-add-file-local-version ()
+  "Add file-local ‘shim-{language}-version’ with its value to the Local Variables list."
+  (interactive)
+  (add-file-local-variable (shim-local-variable (shim--guess-language))
+                           (shim-read-version)))
+
+;;;###autoload
+(defun shim-add-dir-local-version ()
+  "Add directory-local ‘shim-{language}-version’ with its value and major-mode of current buffer to .dir-locals.el."
+  (interactive)
+  (add-dir-local-variable major-mode
+                          (shim-local-variable (shim--guess-language))
+                          (shim-read-version)))
+
+;;;###autoload
 (defun shim-unset (&optional language)
   "Unset version of LANGUAGE."
   (interactive)

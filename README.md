@@ -9,7 +9,7 @@ Emacs integration for Xenv.
 Clone this repository, or install from MELPA. Add the following to your `.emacs`:
 
 ```elisp
-(add-to-list 'load-path (expand-file-name "~/.emacs.d/site-lisp/shim.el"))
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/site-lisp/shim"))
 (require 'shim)
 (shim-init-ruby)
 (shim-init-python)
@@ -33,7 +33,7 @@ Or add to major mode hook:
 (add-hook 'js-mode-hook #'shim-mode)
 ```
 
-If you would like specific version by file local variable:
+If you would like specific version by file local variable (`M-x shim-add-file-local-version`):
 
 ```javascript
 ...
@@ -51,6 +51,8 @@ Then you have to add following instead:
 +            (when (ignore-errors (shim--guess-language))
 +              (shim-mode 1))))
 ```
+
+There is also a `shim-add-dir-local-version` function for user to set dir local variable.
 
 ### Extended
 
