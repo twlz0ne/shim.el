@@ -57,12 +57,25 @@ It contains all of the shim--shim instances that are currently regitered.")
           shim--shims)
     (signal 'shim-error (list (format "Not support for `%s'" major-mode)))))
 
-(defun shim-version (&optional language)
-  "Show currently active version of LANGUAGE."
+(defun shim--version-from-file (&optional ver-file)
+  "Return version from VER-FILE."
+  (let ((ver-file (or ver-file (shim-version-file language))))
+    (if (and ver-file (file-exists-p ver-file))
+        (replace-regexp-in-string
+         "\\(?:\n\\)\\'" "" (shell-command-to-string (format "head -n 1 %s" ver-file)))
+      (car (shim-versions language)))))
+
+(defun shim--version-from-env (&optional language)
+  "Return version of LANGUAGE from env."
   (let* ((language (or language (shim--guess-language)))
          (entity (cdr (assq language shim--shims)))
          (basename (file-name-base (shim--shim-executable entity))))
     (getenv (upcase (concat basename  "_version")))))
+
+(defun shim-version (&optional language)
+  "Show currently active version of LANGUAGE."
+  (or (shim--version-from-env)
+      (shim--version-from-file)))
 
 (defun shim-versions (&optional language)
   "List installed versions of LANGUAGE."
@@ -124,15 +137,9 @@ It contains all of the shim--shim instances that are currently regitered.")
   "Auto set VERSION of LANGUAGE."
   (interactive)
   (let* ((language (or language (shim--guess-language)))
-         (file-local-version (symbol-value (shim-local-variable language))))
-    (shim-set
-     (or file-local-version
-         (let ((ver-file (shim-version-file language)))
-           (if (and ver-file (file-exists-p ver-file))
-               (replace-regexp-in-string
-                "\\(?:\n\\)\\'" "" (shell-command-to-string (format "head -n 1 %s" ver-file)))
-             (car (shim-versions language)))))
-     language)))
+         (version (or (symbol-value (shim-local-variable language))
+                      (shim--version-from-file (shim-version-file language)))))
+    (shim-set version language)))
 
 (defmacro shim-register-mode (language mode)
   "Registers major MODE to LANGUAGE.

@@ -50,9 +50,10 @@ Return project root."
           (make-directory (file-name-directory folder-path) t)))))
     root))
 
-(defun test-nodeshim--newest-version ()
-  "Get newest version of node."
-  (car (reverse (shim-versions 'node))))
+(defun test-nodeshim--global-version ()
+  "Get global version of node."
+  (or (shim--version-from-file (shim-version-file 'node))
+   (car (reverse (shim-versions 'node)))))
 
 (defun test-nodeshim--open-file (file-name &optional defer-p)
   "Open file `FILE-NAME', return node version if `DEFER-P' is nil (the default)."
@@ -84,7 +85,7 @@ Return project root."
 
 (ert-deftest test-nodeshim-node-version-file-0 ()
   (let ((root (test-nodeshim--make-project '(("test.js" . "\n")))))
-    (should (equal (test-nodeshim--newest-version)
+    (should (equal (test-nodeshim--global-version)
                    (test-nodeshim--open-file (concat root "test.js"))))))
 
 (ert-deftest test-nodeshim-node-version-file-1 ()
@@ -163,7 +164,7 @@ Return project root."
 
 (ert-deftest test-nodeshim-get-version-in-temp-buffer ()
   (let ((global-ver (or (test-nodeshim--read-version-from-file "~/.node-version")
-                        (test-nodeshim--newest-version))))
+                        (test-nodeshim--global-version))))
     (should
      (equal
       global-ver
