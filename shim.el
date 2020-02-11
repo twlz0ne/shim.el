@@ -29,7 +29,16 @@
 
 ;;; Change Log:
 
-;;  0.1.0  2018/12/25  Initial version.
+;; 
+;;  0.1.1  2020/02/11
+;; 
+;;     Fix the global version detection error
+;;     Add ‘shim-add-{dir,file}-local-version’
+;; 
+;;  0.1.0  2018/12/25
+;; 
+;;     Initial version.
+;; 
 
 ;;; Code:
 
