@@ -68,10 +68,11 @@ It contains all of the shim--shim instances that are currently regitered.")
 
 (defun shim--version-from-file (&optional ver-file)
   "Return version from VER-FILE."
-  (let ((ver-file (or ver-file (shim-version-file language))))
+  (let ((ver-file (expand-file-name (or ver-file (shim-version-file language)))))
     (if (and ver-file (file-exists-p ver-file))
         (replace-regexp-in-string
-         "\\(?:\n\\)\\'" "" (shell-command-to-string (format "head -n 1 %s" ver-file)))
+         "\\(?:\n\\)\\'" "" (shell-command-to-string
+                             (format "head -n 1 \"%s\"" ver-file)))
       (car (shim-versions language)))))
 
 (defun shim--version-from-env (&optional language)
