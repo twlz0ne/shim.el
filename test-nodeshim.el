@@ -17,15 +17,15 @@
 
 ;;; Code:
 
-(require 'cl)
+(require 'cl-macs)
 (require 'ert)
 (require 'shim)
 
 (setq debug-on-error t)
 (shim-init-node :major-modes '())
 (shim-register-mode 'node 'js-mode)
-(assert (boundp 'shim-node-version))
-(assert (equal '(js-mode) (shim--shim-major-modes (cdr (assq 'node shim--shims)))))
+(cl-assert (boundp 'shim-node-version))
+(cl-assert (equal '(js-mode) (shim--shim-major-modes (cdr (assq 'node shim--shims)))))
 
 (defun test-nodeshim--make-project (specs)
   "Make empty project and create directory & files specified by SPECS.
