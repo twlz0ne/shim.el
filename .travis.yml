@@ -1,4 +1,5 @@
-language: ruby
+language: emacs-lisp
+dist: trusty
 
 cache:
   directories:
