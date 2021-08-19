@@ -85,7 +85,10 @@ It contains all of the shim--shim instances that are currently regitered.")
 (defun shim-version (&optional language)
   "Show currently active version of LANGUAGE."
   (or (shim--version-from-env language)
-      (shim--version-from-file)))
+      (shim--version-from-file
+       (let ((shim (cdr (assoc language shim--shims))))
+         (when shim
+           (shim--shim-global-version-file shim))))))
 
 (defun shim-versions (&optional language)
   "List installed versions of LANGUAGE."
