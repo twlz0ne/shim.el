@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/twlz0ne/shim.el.svg?branch=master)](https://travis-ci.com/twlz0ne/shim.el)
+[![CI](https://github.com/twlz0ne/shim.el/workflows/CI/badge.svg)](https://github.com/twlz0ne/shim.el/actions?query=workflow%3ACI)
 
 ## shim.el
 
